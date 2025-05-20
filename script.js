@@ -24,26 +24,34 @@ function getUserData(username) {
     .then(repos => {
       displayUserRepos(repos);
     })
-    .catch(error => {
-      profileContainer.innerHTML = `<p style="color:red;">${error.message}</p>`;
-    });
+  .catch(error => {
+  profileContainer.classList.remove('hidden');
+  profileContainer.innerHTML = `<p class="text-red-400 font-semibold">${error.message}</p>`;
+});
+
 }
 
 function displayUserProfile(user) {
+  profileContainer.classList.remove('hidden');
   profileContainer.innerHTML = `
-    <img src="${user.avatar_url}" alt="${user.name}'s profile picture">
-    <h2>${user.name}</h2>
-    <p>${user.bio || "No bio available"}</p>
-    <p>${user.followers} <strong>Followers</strong> • ${user.following} <strong>Following</strong> • ${user.public_repos} <strong>Repos</strong></p>
-    <div id="repoList"></div>
+    <div class="flex items-center space-x-4 mb-4">
+      <img src="${user.avatar_url}" alt="${user.name}'s profile picture" class="w-24 h-24 rounded-full">
+      <div>
+        <h2 class="text-2xl font-semibold">${user.name}</h2>
+        <p class="text-sm">${user.bio || "No bio available"}</p>
+      </div>
+    </div>
+    <p class="mb-4 text-sm">${user.followers} <strong>Followers</strong> • ${user.following} <strong>Following</strong> • ${user.public_repos} <strong>Repos</strong></p>
+    <div id="repoList" class="flex flex-wrap gap-2"></div>
   `;
 }
 
 function displayUserRepos(repos) {
   const repoList = document.getElementById('repoList');
+  repoList.innerHTML = "";
   repos.slice(0, 5).forEach(repo => {
     const repoEl = document.createElement('span');
-    repoEl.className = 'repo-tag';
+    repoEl.className = 'bg-blue-900 px-3 py-1 rounded-full text-white text-sm';
     repoEl.textContent = repo.name;
     repoList.appendChild(repoEl);
   });
